@@ -1,0 +1,178 @@
+<!-- public/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.3.0/apexcharts.min.js"
+        integrity="sha512-QgLS4OmTNBq9TujITTSh0jrZxZ55CFjs4wjK8NXsBoZb04UYl8wWQJNaS8jRiLq6/c60bEfOj3cPsxadHICNfw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.3.0/apexcharts.min.css"
+        integrity="sha512-P/8zp3yWsYKLYgykcnVdWono7iWa9VXcoNLFnUhC82oBjt/6z5BIHXTQsMKBgYJjp6K+JAkt4yrID1cxfoUq+g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet" />
+</head>
+<style>
+    body {
+        font-family: "Inter", sans-serif;
+        font-optical-sizing: auto;
+    }
+</style>
+
+<body class="bg-[#e6ebee]" style="background-color: #eff4f6">
+    <%- include("./partials/nav.ejs") %>
+
+    <div class="px-7 py-8">
+        <div class="bg-white p-6 rounded-3xl">
+            <h1
+                class="text-3xl font-bold  bg-clip-text inline-block">
+                Bienvenido, Dr. Pablo! <span >👋</span>
+            </h1>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <!-- Primera Card - Gráfica -->
+            <div class="bg-white p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-4">Terapias prestadas en el año</h2>
+                <div id="chartTerapias"></div>
+            </div>
+
+            <!-- Segunda Card - Numero de pacientes -->
+            <div class="bg-white text-black p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-4">Número de Pacientes</h2>
+                <div id="chartPacientes"></div>
+            </div>
+
+            <div class="bg-gradient-to-b from-blue-600 to-blue-400 p-6 rounded-3xl">
+                <h2 class="text-lg font-bold mb-2 text-white">Próximas citas</h2>
+                <p class="text-sm mb-4 text-white">Jueves, 14 Marzo, 2025</p>
+
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="flex justify-between items-center bg-blue-100 p-3 rounded-xl">
+                        <div>
+                            <p class="font-semibold">Paciente: Juan Pérez</p>
+                            <p class="text-sm text-gray-600">Hora: 09:00 AM</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="bg-green-500 text-white text-xs px-3 py-2 rounded-lg hover:bg-green-600 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                Atendido
+                            </button>
+
+                            <button
+                                class="bg-blue-500 text-white text-xs px-3 py-2 rounded-lg hover:bg-blue-600 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                </svg>
+                                Pagar
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-blue-100 p-3 rounded-xl">
+                        <div>
+                            <p class="font-semibold">Paciente: María López</p>
+                            <p class="text-sm text-gray-600">Hora: 10:30 AM</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="bg-green-500 text-white text-xs px-3 py-2 rounded-lg hover:bg-green-600 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                Atendido
+                            </button>
+                            <button
+                                class="bg-blue-500 text-white text-xs px-3 py-2 rounded-lg hover:bg-blue-600 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                </svg>
+                                Pagar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/transitonAnimation.js"></script>
+
+    <script>
+        var optionsTerapias = {
+            series: [{ name: "Reportes", data: [10, 15, 8, 12, 20, 14] }],
+            chart: { type: "bar", height: 200 },
+            plotOptions: { bar: { borderRadius: 4, columnWidth: "50%" } },
+            dataLabels: { enabled: false },
+            xaxis: { categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"] },
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shade: "light",
+                    type: "vertical",
+                    shadeIntensity: 0.5,
+                    gradientToColors: ["#5ba0f9"],
+                    inverseColors: false,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 100]
+                }
+            },
+            colors: ["#1b5cef"]
+        };
+        var optionsPacientes = {
+            chart: { type: "area", height: 250 },
+            series: [{ name: "Pacientes", data: [120, 75, 30] }],
+            xaxis: {
+                categories: ["Pacientes nuevos", "Pacientes recurrentes", "Pacientes inactivos"],
+                labels: { style: { colors: "#000000" } }
+            },
+            colors: ["#2261ee"],
+            legend: { position: "bottom", labels: { colors: "#2261ee" } },
+            dataLabels: { enabled: true, style: { colors: ["#2261ee"] } },
+            stroke: { curve: "smooth" },
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.5,
+                    opacityTo: 0,
+                    colorStops: [
+                        { offset: 0, color: "#2261ee", opacity: 0.4 },
+                        { offset: 100, color: "#ffffff", opacity: 0.4 }
+                    ]
+                }
+            }
+        };
+
+        var chartTerapias = new ApexCharts(document.querySelector("#chartTerapias"), optionsTerapias);
+        chartTerapias.render();
+        var chartPacientes = new ApexCharts(document.querySelector("#chartPacientes"), optionsPacientes);
+        chartPacientes.render();
+
+    </script>
+</body>
+
+</html>
