@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.3.0/apexcharts.min.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.3.0/apexcharts.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet" />
+        <link rel="stylesheet" href="/css/gridjs.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gridjs/6.2.0/gridjs.production.min.js"
+        integrity="sha512-UxJx7Aa36ndtmns24kdxG3ARmAPPYllynVsgpV18TdQYGhENGkdb+fC8xOjeJ8UR8Rsc5S2xUZ9pCO5ygECnOQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+        }
+
+        .datatable-input {
+            border: none;
+            background-color: #e5e6e1;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+
+<body class="bg-[#e6ebee]" style="background-color: #eff4f6">
+    <div id="modal-overlay"
+        class="fixed inset-0 bg-gray-900 bg-opacity-0 hidden flex items-center justify-center z-50 transition-opacity duration-300">
+        <div id="modal-box"
+            class="bg-white rounded-lg shadow-lg p-6 w-96 transform scale-95 opacity-0 transition-all duration-300">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h2 class="text-lg font-bold text-gray-700">Nuevo Registro</h2>
+                <button id="close-modal" class="text-gray-500 hover:text-red-500">
+                    ✖
+                </button>
+            </div>
+
+            <form id="registro-form" class="mt-4">
+                <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                <input type="text" class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+                    required />
+
+                <label class="block text-sm font-medium text-gray-700 mt-3">Email</label>
+                <input type="email" class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+                    required />
+
+                <label class="block text-sm font-medium text-gray-700 mt-3">Teléfono</label>
+                <input type="tel" class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+                    required />
+
+                <div class="mt-5 flex justify-end gap-2">
+                    <button type="button" id="cancel-modal"
+                        class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <%- include("./partials/nav.ejs") %>
+    <div class="px-7 py-8">
+        <div class="bg-white p-8 rounded-3xl border border-gray-200 shadow-md">
+            <h1 class="text-3xl font-bold text-blue-600">Lista de Pacientes</h1>
+            <div class="overflow-x-auto">
+                <div id="tabla-container"></div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/transitonAnimation.js"></script>
+    <script src="./js/GridWrapper.js"></script>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const modalOverlay = document.getElementById("modal-overlay");
+            const modalBox = document.getElementById("modal-box");
+            const closeModalButton = document.getElementById("close-modal");
+            const cancelModalButton = document.getElementById("cancel-modal");
+
+            function openModal() {
+                modalOverlay.classList.remove("hidden");
+                setTimeout(() => {
+                    modalOverlay.classList.remove("bg-opacity-0");
+                    modalOverlay.classList.add("bg-opacity-50");
+                    modalBox.classList.remove("scale-95", "opacity-0");
+                    modalBox.classList.add("scale-100", "opacity-100");
+                }, 100);
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove("bg-opacity-50");
+                modalOverlay.classList.add("bg-opacity-0");
+                modalBox.classList.remove("scale-100", "opacity-100");
+                modalBox.classList.add("scale-95", "opacity-0");
+
+                setTimeout(() => {
+                    modalOverlay.classList.add("hidden");
+                }, 300);
+            }
+
+            closeModalButton.addEventListener("click", closeModal);
+            cancelModalButton.addEventListener("click", closeModal);
+
+            document.getElementById("registro-form").addEventListener("submit", function (e) {
+                e.preventDefault();
+                alert("Registro guardado");
+                closeModal();
+            });
+
+            let tablaPacientesActivos = document.getElementById("tabla-container");
+            let tablaPacientes = new Tabla(tablaPacientesActivos,
+             ["Nombre", "Edad", "Teléfono", "Email"],
+             [
+                ["Juan Pérez", 30, "555-1234", "juan.perez@example.com"],
+                ["María López", 25, "555-5678", "maria.lopez@example.com"]
+                ]
+            );
+
+            tablaPacientes.render()
+
+            const searchContainer = document.querySelector(".gridjs-search");
+            const searchInput = searchContainer.querySelector("input");
+
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("flex", "justify-end", "items-center", "mb-4");
+
+            searchInput.classList.add(
+                "border",
+                "rounded-full",
+                "px-4",
+                "py-2",
+                "text-gray-700",
+                "bg-gray-100",
+                "w-64"
+            );
+            searchInput.setAttribute("placeholder", "Buscar...");
+
+            const sortButton = document.createElement("button");
+            sortButton.innerHTML = `
+                    <span class="flex items-center gap-2">
+                        Filtros
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" 
+                                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                        </svg>
+                    </span>
+                `;
+
+            sortButton.classList.add(
+                "px-4",
+                "py-2",
+                "rounded-full",
+                "bg-gray-200",
+                "text-gray-700",
+                "font-semibold",
+                "hover:bg-gray-300",
+                "ml-4",
+                "flex",
+                "items-center",
+                "gap-2"
+            );
+
+            const createButton = document.createElement("button");
+            createButton.innerHTML = 'Crear Registro <i class="fas fa-plus"></i>';
+            createButton.classList.add(
+                "px-4",
+                "py-2",
+                "rounded-full",
+                "bg-gradient-to-r",
+                "from-blue-600",
+                "to-blue-500",
+                "text-white",
+                "font-semibold",
+                "hover:bg-green-600",
+                "ml-4"
+            );
+
+            createButton.addEventListener("click", function () {
+                modalOverlay.classList.remove("hidden");
+                modalBox.classList.remove("scale-95");
+                modalBox.classList.add("scale-100");
+            });
+
+            createButton.addEventListener("click", openModal);
+
+            wrapper.appendChild(searchContainer);
+            wrapper.appendChild(sortButton);
+            wrapper.appendChild(createButton);
+
+            document.getElementById("tabla-container").prepend(wrapper);
+
+        });
+
+    </script>
+</body>
+
+</html>

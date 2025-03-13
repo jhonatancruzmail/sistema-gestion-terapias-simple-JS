@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informes</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gridjs/6.2.0/gridjs.production.min.js"
+        integrity="sha512-UxJx7Aa36ndtmns24kdxG3ARmAPPYllynVsgpV18TdQYGhENGkdb+fC8xOjeJ8UR8Rsc5S2xUZ9pCO5ygECnOQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="/css/gridjs.css">
+</head>
+<style>
+    body {
+        font-family: "Inter", sans-serif;
+        font-optical-sizing: auto;
+    }
+</style>
+
+<body class="bg-[#e6ebee]" style="background-color: #eff4f6">
+    <%- include("./partials/nav.ejs") %>
+        <div class="px-7 py-8">
+
+            <div class="bg-white p-8 rounded-3xl shadow-md">
+                <div class="mb-2">
+                    <h1 class="text-3xl font-bold text-blue-600">Informes</h1>
+                    <p class="mt-4 text-gray-700">Aquí puedes ver y generar informes detallados sobre los pacientes y
+                        las
+                        actividades.</p>
+                </div>
+
+                <div class="py-4">
+                    <h2 class="text-2xl font-bold text-blue-600">Informe de Pacientes Activos</h2>
+                    <div id="tabla-pacientes-activos"></div>
+
+                </div>
+                <div class="py-4">
+
+                    <h2 class="text-2xl font-bold text-blue-600">Informe de Sesiones Realizadas</h2>
+                    <div id="tabla-sesiones-realizadas"></div>
+                </div>
+            </div>
+        </div>
+
+        <script src="./js/transitonAnimation.js"></script>
+        <script src="./js/GridWrapper.js"></script>
+
+        <script>
+
+            let tablaPacientesActivos = document.getElementById("tabla-pacientes-activos")
+            let tablaSesionesRealizadas = document.getElementById("tabla-sesiones-realizadas")
+
+            let tablaPacientes = new Tabla(tablaPacientesActivos, ["Nombre", "Edad", "Teléfono", "Estado"], [
+                ["Juan Pérez", 30, "555-1234", "activo"],
+                ["María López", 25, "555-5678", "inactivo"],
+            ])
+
+            tablaPacientes.render();
+
+            let tablaSesiones = new Tabla(tablaSesionesRealizadas, ["Terapeuta", "Paciente", "Fecha", "Resumen"], [
+                ["Dr. Juan Pérez", "María López", "2025-03-14", "Primera sesión"],
+                ["Dra. María López", "Juan Pérez", "2025-03-15", "Segunda sesión"],
+            ]);
+
+            tablaSesiones.render();
+
+        </script>
+</body>
+
+</html>
